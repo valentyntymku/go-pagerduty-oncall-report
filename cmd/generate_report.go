@@ -258,6 +258,8 @@ func calculateSummaryData(data []*report.ScheduleData, pricesInfo *configuration
 				userSummary = &report.ScheduleUser{
 					Name:         schedUser.Name,
 					EmailAddress: schedUser.EmailAddress,
+					Location:    schedUser.Location,
+					HeliosID:    schedUser.HeliosID,
 				}
 				usersSummary[schedUser.Name] = userSummary
 			}
@@ -265,6 +267,7 @@ func calculateSummaryData(data []*report.ScheduleData, pricesInfo *configuration
 			userSummary.NumWorkHours += schedUser.NumWorkHours
 			userSummary.NumWeekendHours += schedUser.NumWeekendHours
 			userSummary.NumBankHolidaysHours += schedUser.NumBankHolidaysHours
+			userSummary.ResponseEffort += schedUser.ResponseEffort
 			userSummary.TotalAmountWorkHours += schedUser.TotalAmountWorkHours
 			userSummary.TotalAmountWeekendHours += schedUser.TotalAmountWeekendHours
 			userSummary.TotalAmountBankHolidaysHours += schedUser.TotalAmountBankHolidaysHours
@@ -368,6 +371,9 @@ func (pd *pagerDutyClient) generateScheduleData(scheduleInfo *api.ScheduleInfo, 
 		scheduleUserData := &report.ScheduleUser{
 			Name:         userRotaInfo.Name,
 			EmailAddress: userEmailAddress,
+			Location: rotationUserConfig.Location,
+			HeliosID:     rotationUserConfig.HeliosID,
+			ResponseEffort: rotationUserConfig.ResponseEffort,
 		}
 
 		for _, period := range userRotaInfo.Periods {

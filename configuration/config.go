@@ -9,6 +9,9 @@ type RotationUser struct {
 	UserID           string
 	Name             string
 	HolidaysCalendar string
+	Location         string
+	HeliosID         string
+	ResponseEffort   float64
 }
 
 type RotationPriceDay struct {

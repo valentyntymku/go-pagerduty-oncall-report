@@ -34,7 +34,7 @@ func (pd *pagerDutyClient) listUsers() error {
 		for _, userTeam := range user.Teams {
 			userTeams += fmt.Sprintf("%s ", userTeam.ID)
 		}
-		output := fmt.Sprintf("[%s] %-30s %-40s in teams: %s", user.ID, user.Name, fmt.Sprintf("<%s>", user.Email), userTeams)
+		output := fmt.Sprintf("%s,%s,%s,%s", user.ID, user.Name, user.Email, userTeams)
 		fmt.Println(output)
 	}
 

@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"sort"
 	"strings"
@@ -28,10 +29,11 @@ func (r *csvReport) GenerateReport(data *PrintableData) (string, error) {
 	fmt.Println(fmt.Sprintf("| Generating report(s) from '%s' to '%s'", data.Start.Format("Mon Jan _2 15:04:05 2006"), data.End.Add(time.Second*-1).Format("Mon Jan _2 15:04:05 2006")))
 	fmt.Println(separator)
 
-	header := []string{"User", "Email",
-		"Weekday Hours", "Weekday Days", "Weekend Hours", "Weekend Days", "Bank Holiday Hours", "Bank Holiday Days",
-		"Total Weekday Amount (" + r.currency + ")", "Total Weekend Amount (" + r.currency + ")",
-		"Total Bank Holiday Amount (" + r.currency + ")", "Total  Amount (" + r.currency + ")"}
+	header := []string{"User", "Email", "Location", "HeliosID",
+		"Weekday Hours", "Weekday Days", "Weekend Hours", "Weekend Days", "Bank Holiday Hours", "Bank Holiday Days", "Response Effort Hours",
+		// "Total Weekday Amount (" + r.currency + ")", "Total Weekend Amount (" + r.currency + ")",
+		// "Total Bank Holiday Amount (" + r.currency + ")", "Total  Amount (" + r.currency + ")"
+	}
 
 	for _, scheduleData := range data.SchedulesData {
 		err := r.writeSingleRotation(scheduleData, data, header)
@@ -120,17 +122,19 @@ func (r *csvReport) writeSingleRotation(scheduleData *ScheduleData, data *Printa
 }
 
 func writeUser(userData *ScheduleUser, w *csv.Writer) error {
-	dat := []string{userData.Name, userData.EmailAddress,
+	dat := []string{userData.Name, userData.EmailAddress, userData.Location, userData.HeliosID,
 		fmt.Sprintf("%v", userData.NumWorkHours),
 		fmt.Sprintf("%.1f", userData.NumWorkDays),
 		fmt.Sprintf("%v", userData.NumWeekendHours),
 		fmt.Sprintf("%.1f", userData.NumWeekendDays),
 		fmt.Sprintf("%v", userData.NumBankHolidaysHours),
 		fmt.Sprintf("%.1f", userData.NumBankHolidaysDays),
-		fmt.Sprintf("%v", userData.TotalAmountWorkHours),
-		fmt.Sprintf("%v", userData.TotalAmountWeekendHours),
-		fmt.Sprintf("%v", userData.TotalAmountBankHolidaysHours),
-		fmt.Sprintf("%v", userData.TotalAmount)}
+		fmt.Sprintf("%v", math.Ceil(userData.ResponseEffort)),
+		// fmt.Sprintf("%v", userData.TotalAmountWorkHours),
+		// fmt.Sprintf("%v", userData.TotalAmountWeekendHours),
+		// fmt.Sprintf("%v", userData.TotalAmountBankHolidaysHours),
+		// fmt.Sprintf("%v", userData.TotalAmount)
+		}
 	if err := w.Write(dat); err != nil {
 		log.Println("error writing record to csv:", err)
 		return err

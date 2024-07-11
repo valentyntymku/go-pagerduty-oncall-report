@@ -22,6 +22,8 @@ type ScheduleData struct {
 type ScheduleUser struct {
 	Name                         string
 	EmailAddress                 string
+	Location 				   	 string
+	HeliosID					 string
 	NumWorkHours                 float32
 	NumWorkDays                  float32
 	TotalAmountWorkHours         float32
@@ -32,6 +34,7 @@ type ScheduleUser struct {
 	NumBankHolidaysDays          float32
 	TotalAmountBankHolidaysHours float32
 	TotalAmount                  float32
+	ResponseEffort			     float64
 }
 
 type Writer interface {
